@@ -30,3 +30,41 @@ grant all privileges on *.* to 'root'@'%' identified by 'root' with grant option
 flush privileges;
 
 docker exec -it mysql /bin/bash
+
+
+
+
+docker run -p 3306:3306 --name mysql \
+-v /Users/YourUser/mydata/mysql/log:/var/log/mysql \
+-v /Users/YourUser/mydata/mysql/data:/var/lib/mysql \
+-v /Users/YourUser/mydata/mysql/conf:/etc/mysql \
+-e MYSQL_ROOT_PASSWORD=root \
+-e TZ=yourZone \
+-d mysql:5.7
+
+vi /Users/YourUser/mydata/mysql/conf/my.cnf
+[client]
+default-character-set=utf8
+[mysql]
+default-character-set=utf8
+[mysqld]
+init_connect='SET collation_connection = utf8_unicode_ci'
+init_connect='SET NAMES utf8'
+character-set-server=utf8
+collation-server=utf8_unicode_ci
+skip-character-set-client-handshake
+skip-name-resolve
+
+
+mkdir /Users/YourUser/mydata/mysql/conf/conf.d
+
+
+
+
+docker exec -it mysql mysql -uroot -proot
+
+grant all privileges on *.* to 'root'@'%' identified by 'root' with grant option;
+flush privileges;
+
+docker exec -it mysql /bin/bash
+

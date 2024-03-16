@@ -33,16 +33,25 @@ docker exec -it mysql /bin/bash
 
 
 
-
 docker run -p 3306:3306 --name mysql \
--v /Users/YourUser/mydata/mysql/log:/var/log/mysql \
--v /Users/YourUser/mydata/mysql/data:/var/lib/mysql \
--v /Users/YourUser/mydata/mysql/conf:/etc/mysql \
+-v /Users/youruser/mydata/mysql/log:/var/log/mysql \
+-v /Users/youruser/mydata/mysql/data:/var/lib/mysql \
+-v /Users/youruser/mydata/mysql/conf:/etc/mysql \
 -e MYSQL_ROOT_PASSWORD=root \
 -e TZ=yourZone \
 -d mysql:5.7
 
-vi /Users/YourUser/mydata/mysql/conf/my.cnf
+
+docker run -p 3306:3306 \
+--platform linux/amd64 --name mysql \
+-v /Users/youruser/mydata/mysql/log:/var/log/mysql \
+-v /Users/youruser/mydata/mysql/data:/var/lib/mysql \
+-v /Users/youruser/mydata/mysql/conf:/etc/mysql \
+-e MYSQL_ROOT_PASSWORD=root \
+-e TZ=yourZone \
+-d mysql:5.7
+
+vi /Users/youruser/mydata/mysql/conf/my.cnf
 [client]
 default-character-set=utf8
 [mysql]
@@ -56,7 +65,7 @@ skip-character-set-client-handshake
 skip-name-resolve
 
 
-mkdir /Users/YourUser/mydata/mysql/conf/conf.d
+mkdir /Users/youruser/mydata/mysql/conf/conf.d
 
 
 

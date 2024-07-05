@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+  api:
+    build:
+      context: .
+      target: docker
+    container_name: "spring-boot-app"
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: "curl -f localhost:8080/actuator/health"
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    volumes:
+      - ./:/app
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    container_name: "acl_mysql"
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_USER=local
+      - MYSQL_PASSWORD=local
+      - MYSQL_DATABASE=acl
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - mysql_config:/etc/mysql/conf.d
+      - ./sql:/docker-entrypoint-initdb.d
+
+  redis:
+    image: redis
+    container_name: redis
+    volumes:
+      - redis_data:/data
+      - redis_config:/etc/redis/redis_default.conf
+    ports:
+      - "6379:6379"
+    command: redis-server /etc/redis/redis_default.conf --appendonly yes
+
+volumes:
+  mysql_data:
+  mysql_config:
+  redis_data:
+  redis_config:
